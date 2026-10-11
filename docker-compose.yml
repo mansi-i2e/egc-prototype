@@ -1,1 +1,44 @@
 # TODO: fill from guide
+
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: egc
+      POSTGRES_PASSWORD: egc
+      POSTGRES_DB: egc
+    ports:
+      - "15434:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U egc -d egc"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  backend:
+    build: ./backend
+    environment:
+      DATABASE_URL: postgresql://egc:egc@db:5432/egc
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    volumes:
+      - ./backend/app:/code/app # code badlo to server auto-reload ho
+
+  frontend:
+    build: ./frontend
+    environment:
+      BACKEND_URL: http://backend:8000
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # container ke node_modules ko laptop ke folder se overwrite hone se bachata hai
+volumes:
+  pgdata:
