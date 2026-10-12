@@ -1,7 +1,8 @@
-# TODO: fill from guide
 from datetime import date
-from sqlalchemy import String, ForeignKey, Date, Float
+
+from sqlalchemy import Date, Float, ForeignKey, String
 from sqlalchemy.orm import Mapped, mapped_column
+
 from .db import Base
 
 

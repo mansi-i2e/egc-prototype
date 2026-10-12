@@ -1,6 +1,6 @@
-# TODO: fill from guide
 from contextlib import asynccontextmanager
-from fastapi import FastAPI, Depends, HTTPException
+
+from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy import func
 from sqlalchemy.orm import Session
 
